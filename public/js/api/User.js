@@ -72,6 +72,16 @@ class User {
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
   static logout(callback) {
-
+    createRequest({
+      url: this.URL,
+      method: 'GET',
+      responseType: 'json',
+      data,
+      callback: (response) => {
+        if (response.success) {
+          App.setState('init');
+        }        
+      }
+    })
   }
 }
