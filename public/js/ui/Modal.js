@@ -25,7 +25,7 @@ class Modal {
    * */
   registerEvents() {
     document.querySelectorAll('[data-dismiss="modal"]').forEach(element => element.addEventListener('click', (e) => {
-      this.onClose(e);  
+      this.onClose(e);
     })    
   )}  
 
@@ -34,7 +34,9 @@ class Modal {
    * Закрывает текущее окно (Modal.close())
    * */
   onClose(e) { 
-    e.target.closest('.modal').close();  
+    let child = e.target;
+    this.element = child.closest('.modal');
+    this.close();  
   }
 
   /**
