@@ -19,7 +19,8 @@ class Sidebar {
    * */
   static initToggleButton() {
     document.querySelector('.sidebar-toggle').addEventListener('click', (e) => {
-      document.querySelector('body').classList.toggle('sidebar-open sidebar-collapse');
+      document.querySelector('body').classList.toggle('sidebar-open');
+      document.querySelector('body').classList.toggle('sidebar-collapse');
     });
   }
 
@@ -32,14 +33,16 @@ class Sidebar {
    * */
   static initAuthLinks() {
     document.querySelector('.menu-item_login').addEventListener('click', (e) => {
-      Modal.open(App.getModal('login'));
+      App.getModal('login').open();
+      App.getModal('login').registerEvents();
     });
     document.querySelector('.menu-item_register').addEventListener('click', (e) => {
-      Modal.open(App.getModal('register'));
+      App.getModal('register').open();
+      App.getModal('register').registerEvents();
     });
     
     document.querySelector('.menu-item_logout').addEventListener('click', (e) => {
-      User.logout(callback);
+      User.logout(callback);      
     });
   }
 }
