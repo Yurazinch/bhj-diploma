@@ -12,10 +12,11 @@ class Modal {
    * необходимо выкинуть ошибку.
    * */
   constructor(element) {
-    this.element = element;
-      if(!element) {
-    throw 'Элемент не существует';
-    }   
+    if(!element) {
+    throw Error('Элемент не существует');
+    } 
+    this.element = element;  
+    this.registerEvents();
   }
 
   /**
@@ -33,9 +34,8 @@ class Modal {
    * Срабатывает после нажатия на элементы, закрывающие окно.
    * Закрывает текущее окно (Modal.close())
    * */
-  onClose(e) { 
-    let child = e.target;
-    this.element = child.closest('.modal');
+  onClose(e) {     
+    this.element = e.target.closest('.modal');
     this.close();  
   }
 

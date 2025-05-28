@@ -9,14 +9,15 @@ class User {
    * локальном хранилище.
    * */
   static setCurrent(user) {
-
+    window.localStorage.setItem(user);
   }
 
   /**
    * Удаляет информацию об авторизованном
    * пользователе из локального хранилища.
    * */
-  static unsetCurrent() {
+  static unsetCurrent(user) {
+    window.localStorage.removeItem(user);
 
   }
 
@@ -24,8 +25,8 @@ class User {
    * Возвращает текущего авторизованного пользователя
    * из локального хранилища
    * */
-  static current() {
-
+  static current(user) {
+    window.localStorage.getItem(user);
   }
 
   /**
@@ -52,7 +53,9 @@ class User {
         if (response && response.user) {
           this.setCurrent(response.user);
         }
-        callback(err, response);
+        if(err) {
+          throw Error('Ошибка авторизации');
+        }        
       }
     });
   }
@@ -64,7 +67,20 @@ class User {
    * User.setCurrent.
    * */
   static register(data, callback) {
-
+    createRequest({
+      url: this.URL + '/register',
+      method: 'GET',
+      responseType: 'json',
+      data,    
+       callback: (err, response) => {
+        if (response && response.user) {
+          this.setCurrent(response.user);
+        }
+        if(err) {
+          throw Error('Ошибка авторизации');
+        }        
+      }
+    })    
   }
 
   /**
@@ -80,6 +96,7 @@ class User {
       callback: (response) => {
         if (response.success) {
           App.setState('init');
+          User.unsetCurrent(response.user);
         }        
       }
     })

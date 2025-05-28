@@ -33,12 +33,10 @@ class Sidebar {
    * */
   static initAuthLinks() {
     document.querySelector('.menu-item_login').addEventListener('click', (e) => {
-      App.getModal('login').open();
-      App.getModal('login').registerEvents();
+      App.getModal('login').open();      
     });
     document.querySelector('.menu-item_register').addEventListener('click', (e) => {
-      App.getModal('register').open();
-      App.getModal('register').registerEvents();
+      App.getModal('register').open();      
     });
     
     document.querySelector('.menu-item_logout').addEventListener('click', (e) => {

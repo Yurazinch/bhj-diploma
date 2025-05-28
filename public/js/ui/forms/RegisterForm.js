@@ -10,6 +10,13 @@ class RegisterForm extends AsyncForm {
    * и закрывает окно, в котором находится форма
    * */
   onSubmit(data) {
-
+    User.register( data, function ( response ) {
+      createRequest(data);
+      if(response.success) {
+        App.setState( 'user-logged' );
+        form.reset();
+        RegisterForm.close();
+      }      
+    });
   }
 }
