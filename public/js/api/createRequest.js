@@ -24,9 +24,9 @@ const createRequest = (options = {url, method, responseType, data}) => {
         xhr.open( 'GET', requestUrl );
         xhr.send();
     }
-    let response = xhr.response;
-    console.log(response);
-    let err;    
-    xhr.onerror = () => err = Error("Запрос не удался"); 
-    return {err, response};
+    
+    return (err, response) => {
+        xhr.onload = () => response = xhr.response;
+        xhr.onerror = () => err = Error("Запрос не удался");
+    };
 }
