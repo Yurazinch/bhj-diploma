@@ -9,7 +9,7 @@ class User {
    * локальном хранилище.
    * */
   static setCurrent(user) {
-    window.localStorage.setItem(user);
+    localStorage.setItem(user);
   }
 
   /**
@@ -17,7 +17,7 @@ class User {
    * пользователе из локального хранилища.
    * */
   static unsetCurrent(user) {
-    window.localStorage.removeItem(user);
+    localStorage.removeItem(user);
 
   }
 
@@ -26,7 +26,7 @@ class User {
    * из локального хранилища
    * */
   static current(user) {
-    window.localStorage.getItem(user);
+    localStorage.getItem(user);
   }
 
   /**

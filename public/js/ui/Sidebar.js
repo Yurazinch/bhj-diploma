@@ -40,7 +40,7 @@ class Sidebar {
     });
     
     document.querySelector('.menu-item_logout').addEventListener('click', (e) => {
-      User.logout(callback);      
+            
     });
   }
 }

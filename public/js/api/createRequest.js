@@ -2,30 +2,31 @@
  * Основная функция для совершения запросов
  * на сервер.
  * */
-const createRequest = (options = {url, data}) => {
+const createRequest = (options = {url, method, responseType, data}) => {
     const xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';    
-    xhr.method = 'GET';    
-    const formData = new FormData();
-    let url = options.url;
+    xhr.responseType = options.responseType;    
+    xhr.method = options.method;
+    url = options.url;
+    const formData = new FormData();    
     if(xhr.method != 'GET') {   
-        for(let item in options.data) {
-            formData.append( item );
+        for(let [key, value] in options.data) {
+            formData.append( key, value );
         } 
         xhr.open( 'POST', url );
         xhr.send( formData );
         } else {
         let res = [];
-        for(let key in data) {            
-            res.push(`${key}=${data[key]}`);
+        for(let key in options.data) {            
+            res.push(`${key}=${options.data[key]}`);
         }
         let requestUrl = url + '?' + res.join('&');
+        console.log(requestUrl);
         xhr.open( 'GET', requestUrl );
         xhr.send();
     }
-    let response;
-    let err;
-    xhr.onload = () => response = xhr.response;
-    xhr.onerror = () => err = null; 
-    return (err, response);
+    let response = xhr.response;
+    console.log(response);
+    let err;    
+    xhr.onerror = () => err = Error("Запрос не удался"); 
+    return {err, response};
 }
