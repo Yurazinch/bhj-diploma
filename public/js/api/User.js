@@ -93,11 +93,14 @@ class User {
       method: 'GET',
       responseType: 'json',
       data,
-      callback: (response) => {
+      callback: (err, response) => {
         if (response.success) {
           App.setState('init');
           User.unsetCurrent(response.user);
-        }        
+        } 
+        if (err) {
+          throw Error('Ошибка запроса');
+        }       
       }
     })
   }
