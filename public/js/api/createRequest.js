@@ -23,9 +23,8 @@ const createRequest = (options = {url, method, responseType, data}) => {
     xhr.open( options.method, url );
     xhr.send();
 
-    return (err, response) => {
-        xhr.onload = () => response = xhr.response;
-        xhr.onerror = () => err = Error("Запрос не удался");
-        console.log(response);
-    };
+    return callback = (err, response) => {        
+        xhr.onerror = () => err = Error('Ошибка соединения');
+        xhr.onload = () => xhr.response = response;
+    }
 }

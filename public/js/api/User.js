@@ -50,12 +50,14 @@ class User {
       responseType: 'json',
       data,
       callback: (err, response) => {
-        if (response && response.user) {
-          this.setCurrent(response.user);
-        }
         if(err) {
-          throw Error('Ошибка авторизации');
-        }        
+          throw Error('Ошибка запроса');
+        }
+        },
+        callback: (response) => {
+          if (response && response.user) {
+          this.setCurrent(response.user);
+        }                      
       }
     });
   }
@@ -77,7 +79,7 @@ class User {
           this.setCurrent(response.user);
         }
         if(err) {
-          throw Error('Ошибка авторизации');
+          throw Error('Ошибка запроса');
         }        
       }
     })    
