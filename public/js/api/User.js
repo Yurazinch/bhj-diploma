@@ -46,9 +46,9 @@ class User {
         } 
         if (user === true) {
           User.setCurrent(user);
-        } else {
-          statusText = err;
-          throw Error("statusText");
+        } 
+        if (err) {
+          throw Error('Ошибка запроса');
         }
       }
     })
@@ -70,11 +70,10 @@ class User {
       data,
       cbResp: (err, response) => {        
         if (response.user) {
-          user = response.user
-          this.setCurrent( user );
-        } else {
-          statusText = err;
-          throw Error("statusText");
+          this.setCurrent( response.user );
+        } 
+        if (err) {          
+          throw Error('Ошибка запроса');
         } 
       }
     })
@@ -94,11 +93,10 @@ class User {
       data,    
       cbResp: (err, response) => {
         if (response.user) {
-          user = response.user
-          this.setCurrent( user );
-        } else {
-          statusText = err;
-          throw Error("statusText");
+          this.setCurrent( response.user );
+        }
+        if (err) {
+          throw Error('Ошибка запроса');
         }
       }                 
     })
@@ -117,11 +115,10 @@ class User {
       cbResp: (err, response) => {
         if (response.success) {
           App.setState('init');
-          user = response.user;
-          User.unsetCurrent( user );
-        }else {
-          statusText = err;
-          throw Error("statusText");
+          User.unsetCurrent( response.user );
+        }
+        if (err) {
+          throw Error('Ошибка запроса');
         }
       }                
     })
