@@ -2,7 +2,7 @@
  * Основная функция для совершения запросов
  * на сервер.
  * */
-const createRequest = (options = { url, responseType, method, data }, cbResp ) => {
+const createRequest = (options = { url, responseType, method, data }, callback ) => {
     let xhr = new XMLHttpRequest();
     url = options.url;
     xhr.responseType = options.responseType;
@@ -23,21 +23,17 @@ const createRequest = (options = { url, responseType, method, data }, cbResp ) =
         console.log(url);           
     }
     xhr.open( options.method, url );
-    xhr.send(formData);
-
-    cbResp = () => {
-        xhr.onload = () => {
-            if(xhr.status === 200 ) {
-                response = xhr.response;
-                console.log(response);
-            }
+    
+    xhr.onload = () => {
+        if(xhr.status === 200 ) {
+            response = xhr.response;
+            callback(null, response);
         }
-        xhr.onerror = () => {
-            err = new Error('Ошибка запроса');
-        }
-        return response, err;        
+    }
+    xhr.onerror = (e) => {
+        err = e.type
+        callback(err, null);
     }    
     
-    
-
-}
+    xhr.send(formData);
+} 

@@ -32,13 +32,13 @@ class User {
    * Получает информацию о текущем
    * авторизованном пользователе.
    * */
-  static fetch(cbResp) {
+  static fetch(callback) {
     createRequest({
       url: this.URL + '/current',
       method: 'GET',
       responseType: 'json',
       data,
-      cbResp: (err, response) => {
+      callback: (err, response) => {
         let user = response.user;
         if (user === false) {          
           User.unsetCurrent(user);
@@ -62,13 +62,13 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
-  static login(data, cbResp) {
+  static login(data, callback) {
     createRequest({
       url: this.URL + '/login',
       method: 'POST',
       responseType: 'json',
       data,
-      cbResp: (err, response) => {        
+      callback: (err, response) => {        
         if (response.user) {
           this.setCurrent( response.user );
         } 
@@ -85,13 +85,13 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
-  static register(data, cbResp) {
+  static register(data, callback) {
     createRequest({
       url: this.URL + '/register',
       method: 'GET',
       responseType: 'json',
       data,    
-      cbResp: (err, response) => {
+      callback: (err, response) => {
         if (response.user) {
           this.setCurrent( response.user );
         }
@@ -106,13 +106,13 @@ class User {
    * Производит выход из приложения. После успешного
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
-  static logout(cbResp) {
+  static logout(callback) {
     createRequest({
       url: this.URL + '/logout',
       method: 'POST',
       responseType: 'json',
       data,
-      cbResp: (err, response) => {
+      callback: (err, response) => {
         if (response.success) {
           App.setState('init');
           User.unsetCurrent( response.user );
