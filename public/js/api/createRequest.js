@@ -24,13 +24,17 @@ const createRequest = (options = { url, responseType, method, data }, callback )
     }
     xhr.open( options.method, url );
     
-    xhr.onload = () => {
+    xhr.onload = () => {                // обработка ответа сервера
         if(xhr.status === 200 ) {
             response = xhr.response;
             callback(null, response);
+        } else {
+            err = response.statusText;
+            callback(err, null);
         }
     }
-    xhr.onerror = (e) => {
+    
+    xhr.onerror = (e) => {              // обработка ошибок сети
         err = e.type
         callback(err, null);
     }    
