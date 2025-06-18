@@ -11,6 +11,8 @@ class User {
   static setCurrent( user ) {    
     localStorage.setItem( user, JSON.stringify( user ) );    
   }
+  
+ 
 
   /**
    * Удаляет информацию об авторизованном
@@ -28,6 +30,8 @@ class User {
     JSON.parse(localStorage.getItem( user ));
   }
 
+  static URL = '/user';
+
   /**
    * Получает информацию о текущем
    * авторизованном пользователе.
@@ -37,24 +41,25 @@ class User {
       url: this.URL + '/current',
       method: 'GET',
       responseType: 'json',
-      data,
       callback: (err, response) => {
-        let user = response.user;
-        if (user === false) {          
-          User.unsetCurrent(user);
-          throw Error('Необходима авторизация');                
-        } 
-        if (user === true) {
-          User.setCurrent(user);
+        if(response.success && !this.current()) {          
+          callback = (err, response) => {         
+          this.setCurrent(response.user);
+          }
+        }
+        if(!response.success && this.current()) {           
+          callback = (err,response) => {
+            this.unsetCurrent(response.user);              
+          }
+          throw Error('Необходима авторизация');
         } 
         if (err) {
           throw Error('Ошибка запроса');
-        }
+        }    
       }
     })
   }
-
-  static URL = '/user';
+  
 
   /**
    * Производит попытку авторизации.
@@ -68,13 +73,15 @@ class User {
       method: 'POST',
       responseType: 'json',
       data,
-      callback: (err, response) => {        
-        if (response.user) {
+      callback: (err, response) => { 
+        console.log(response);     
+        if (response.success) {
           this.setCurrent( response.user );
+          callback (err, response);
         } 
         if (err) {          
           throw Error('Ошибка запроса');
-        } 
+        }        
       }
     })
   }  
@@ -92,12 +99,14 @@ class User {
       responseType: 'json',
       data,    
       callback: (err, response) => {
+        console.log(response);
         if (response.user) {
           this.setCurrent( response.user );
+          callback(err, response);
         }
         if (err) {
           throw Error('Ошибка запроса');
-        }
+        }        
       }                 
     })
   } 
@@ -116,10 +125,11 @@ class User {
         if (response.success) {
           App.setState('init');
           User.unsetCurrent( response.user );
+          callback(err, response);
         }
         if (err) {
           throw Error('Ошибка запроса');
-        }
+        }        
       }                
     })
   }
