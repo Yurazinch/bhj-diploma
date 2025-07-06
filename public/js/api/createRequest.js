@@ -5,12 +5,11 @@
 const createRequest = (options = {}) => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = 'json'; 
-    const formData = new FormData();
-    console.log(options.data);
+    const formData = new FormData();    
     let url = options.url;
     if(options.method != 'GET') {   
         for(let key in options.data) {
-            formData.append( [key], options.data[key] );
+            formData.append( key, options.data.key );
             console.log(formData);
             } 
         } else {
@@ -23,18 +22,12 @@ const createRequest = (options = {}) => {
     }
     xhr.open( options.method, url );
     
-    let response;
-    let err;
-    
     xhr.onload = () => {
-        response = xhr.response; 
-        console.log(response);
-        options.callback(null, response);       
+        options.callback(null, xhr.response);       
     }
     
     xhr.onerror = (e) => {
-        err = new Error;
-        options.callback(err, null);
+        options.callback(new Error(), null);
     } 
 
     xhr.send(formData);

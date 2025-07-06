@@ -9,7 +9,7 @@ class User {
    * локальном хранилище.
    * */
   static setCurrent( user ) {    
-    localStorage.setItem( user, JSON.stringify( user ) );    
+    localStorage.setItem( user.email, JSON.stringify( response.user ) );    
   }
   
  
@@ -18,16 +18,16 @@ class User {
    * Удаляет информацию об авторизованном
    * пользователе из локального хранилища.
    * */
-  static unsetCurrent( user ) {
-    localStorage.removeItem( user );
+  static unsetCurrent() {
+    localStorage.removeItem();
   }
 
   /**
    * Возвращает текущего авторизованного пользователя
    * из локального хранилища
    * */
-  static current( user ) {
-    JSON.parse(localStorage.getItem( user ));
+  static current() {
+    JSON.parse(localStorage.getItem(response.user.email));
   }
 
   static URL = '/user';
@@ -42,22 +42,17 @@ class User {
       method: 'GET',
       responseType: 'json',
       callback: (err, response) => {
-        if(response.success && !this.current()) {          
-          callback = (err, response) => {         
+        if(response) { 
+          if(response.user) {
           this.setCurrent(response.user);
+          } else {
+            this.unsetCurrent(response.user); 
+            throw Error('Необходима авторизация');
           }
-        }
-        if(!response.success && this.current()) {           
-          callback = (err,response) => {
-            this.unsetCurrent(response.user);              
-          }
-          throw Error('Необходима авторизация');
-        } 
-        if (err) {
-          throw Error('Ошибка запроса');
-        }    
+          callback(err, response);
+        }                   
       }
-    })
+    });
   }
   
 
@@ -74,16 +69,12 @@ class User {
       responseType: 'json',
       data,
       callback: (err, response) => { 
-        console.log(response);     
-        if (response.success) {
-          this.setCurrent( response.user );
-          callback (err, response);
+        if (response && response.user) {
+          this.setCurrent( response.user );          
         } 
-        if (err) {          
-          throw Error('Ошибка запроса');
-        }        
+        callback(err, response);        
       }
-    })
+    });
   }  
 
   /**
@@ -98,15 +89,11 @@ class User {
       method: 'GET',
       responseType: 'json',
       data,    
-      callback: (err, response) => {
-        console.log(response);
-        if (response.user) {
-          this.setCurrent( response.user );
-          callback(err, response);
+      callback: (err, response) => {        
+        if (response && response.user) {
+          this.setCurrent( response.user );          
         }
-        if (err) {
-          throw Error('Ошибка запроса');
-        }        
+        callback(err, response);        
       }                 
     })
   } 
@@ -122,14 +109,10 @@ class User {
       responseType: 'json',
       data,
       callback: (err, response) => {
-        if (response.success) {
-          App.setState('init');
-          User.unsetCurrent( response.user );
-          callback(err, response);
+        if (response && response.user) {
+          this.unsetCurrent( response.user );          
         }
-        if (err) {
-          throw Error('Ошибка запроса');
-        }        
+        callback(err, response);        
       }                
     })
   }

@@ -40,12 +40,12 @@ class Sidebar {
     });    
     document.querySelector('.menu-item_logout').addEventListener('click', (e) => {
       User.logout((err, response) => {
-        if(response.success) {
-          App.setState( 'init' );
-        }
         if(err) {
           throw Error ('Ошибка запроса');
         }
+        if(response) {
+          App.setState( 'init' );
+        }        
       });          
     });
   }
